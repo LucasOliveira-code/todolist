@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using TodoAPI.Models;
+using TodoAPI.Services;
 
 namespace TodoAPI
 {
@@ -24,7 +27,16 @@ namespace TodoAPI
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+        
         {
+            
+            // requires using Microsoft.Extensions.Options
+            services.Configure<TodoListDatabaseSettings>(
+                Configuration.GetSection(nameof(TodoListDatabaseSettings)));
+
+            services.AddSingleton<ITodoListDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<TodoListDatabaseSettings>>().Value);
+            services.AddSingleton<TodoService>();
             services.AddControllers();
         }
 
