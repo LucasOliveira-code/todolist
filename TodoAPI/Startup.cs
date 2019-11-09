@@ -54,6 +54,10 @@ namespace TodoAPI
 
             app.UseAuthorization();
 
+            app.UseCors(c => c.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
